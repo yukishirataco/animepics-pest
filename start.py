@@ -11,11 +11,18 @@ from urllib import request
 import os
 import re
 import random
+if os.path.exists('./downloads'):
+    #下载目录存在，什么都不做
+    pass
+else:
+    print("下载目录不存在...建立中...")
+    os.makedirs('./downloads')
+print('Anime Pest')
 inputs = input('请输入你要查询的tag(可以有多个):')
 #选择图片来源
 src_i = input('请输入图片来源，1.Gelbooru,2.Yande.re(默认为Gelbooru):')
 if src_i == '1':
-    source = r'http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags='
+    source = r'http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=-comic -monochrome'
 elif src_i == '2':
     source = r'https://yande.re/post.xml?tags='
 else:
@@ -59,11 +66,11 @@ if r.status_code == 200:
                 for link in pics:
                 #不同网站使用不同爬取规则
                     if src_i == '1':
-                        request.urlretrieve(link['file_url'], r'%s' % link['file_url'][40:])
+                        request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][40:])
                         count=count+1
                         print('已成功下载'+link['file_url'][40:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     elif src_i == '2':
-                        request.urlretrieve(link['file_url'], r'%s' % link['file_url'][62:])
+                        request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
                         count=count+1
                         print('已成功下载'+link['file_url'][62:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     #图片计数加一
