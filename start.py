@@ -7,8 +7,9 @@ Python爬虫 for Gelbooru
 import time
 import requests
 from bs4 import BeautifulSoup
-from urllib import request
+import urllib
 import os
+
 if os.path.exists('./downloads'):
     #下载目录存在，什么都不做
     pass
@@ -45,6 +46,10 @@ else:
 
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0'} 
 r = requests.get(source+inputs+rate+' -comic -monochrome',headers=headers) 
+opener=urllib.request.build_opener()
+opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+urllib.request.install_opener(opener)
+
 #以伪装的Header爬取Gelbooru相关tag内容
 if r.status_code == 200:
     soup = BeautifulSoup(r.text, "lxml")
@@ -73,11 +78,11 @@ if r.status_code == 200:
                 for link in pics:
                 #不同网站使用不同爬取规则
                     if src_i == '1':
-                        request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][40:])
+                        urllib.request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][40:])
                         count=count+1
                         print('已成功下载'+link['file_url'][40:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     elif src_i == '2':
-                        request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
+                        urllib.requests.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
                         count=count+1
                         print('已成功下载'+link['file_url'][62:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     #图片计数加一
@@ -85,6 +90,9 @@ if r.status_code == 200:
                     print('第'+str(page)+'页已经爬取完毕，爬取完成，共获取了'+str(count)+'张图')
                 else:
                     print('第'+str(page)+'页已经爬取完毕，下一页是第'+str(page+1)+'页')
-            if zipped == True:
-                compress_cmd = 'zip -r ' + 'downloads.zip ' + './downloads/'
+            if zipped == True: 
+                compress_cmd = 'zip -r '+ 'downloads.zip ' + './downloads/'
                 os.system(compress_cmd)
+                remove_cmd = 'rm -rf ./downloads'
+                os.system(remove_cmd)
+
