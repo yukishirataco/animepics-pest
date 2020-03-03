@@ -7,7 +7,7 @@ Python爬虫 for Gelbooru
 import time
 import requests
 from bs4 import BeautifulSoup
-import urllib
+import urllib.request
 import os
 
 if os.path.exists('./downloads'):
@@ -82,7 +82,7 @@ if r.status_code == 200:
                         count=count+1
                         print('已成功下载'+link['file_url'][40:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     elif src_i == '2':
-                        urllib.requests.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
+                        urllib.request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
                         count=count+1
                         print('已成功下载'+link['file_url'][62:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     #图片计数加一
