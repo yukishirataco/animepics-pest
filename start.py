@@ -7,7 +7,7 @@ Python爬虫 for Gelbooru
 import time
 import requests
 from bs4 import BeautifulSoup
-import urllib
+import urllib.request
 import os
 
 def recu_down(url,filename): # recurrent download with ContentTooShortError
