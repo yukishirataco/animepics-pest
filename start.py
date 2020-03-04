@@ -10,6 +10,13 @@ from bs4 import BeautifulSoup
 import urllib.request
 import os
 
+def recu_down(url,filename): # recurrent download with ContentTooShortError
+    try:
+        urllib.request.urlretrieve(url,filename)
+    except urllib.error.ContentTooShortError:
+        print ('Network conditions is not good. Reloading...')
+        recu_down(url,filename)
+        
 if os.path.exists('./downloads'):
     #下载目录存在，什么都不做
     pass
@@ -78,11 +85,11 @@ if r.status_code == 200:
                 for link in pics:
                 #不同网站使用不同爬取规则
                     if src_i == '1':
-                        urllib.request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][40:])
+                        recu_down(link['file_url'], r'./downloads/%s' % link['file_url'][40:])
                         count=count+1
                         print('已成功下载'+link['file_url'][40:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     elif src_i == '2':
-                        urllib.request.urlretrieve(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
+                        recu_down(link['file_url'], r'./downloads/%s' % link['file_url'][62:])
                         count=count+1
                         print('已成功下载'+link['file_url'][62:]+',共'+str(num)+'张图,还剩'+str(num-count)+'张,现在位于第'+str(page)+'页')
                     #图片计数加一
